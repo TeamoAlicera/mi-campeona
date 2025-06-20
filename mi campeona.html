@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Te Amo</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      overflow: hidden;
+      font-family: sans-serif;
+      cursor: pointer;
+      background-image: url('https://i.pinimg.com/originals/e7/80/f4/e780f4c1390e59024f8f112d77f7bb9d.gif');
+      background-size: cover;
+      background-repeat: repeat;
+      background-position: center;
+      height: 100vh;
+      position: relative;
+    }
+    .mensaje {
+      position: absolute;
+      font-size: 24px;
+      color: #cc0000;
+      user-select: none;
+      animation: caer-vertical 2s linear forwards;
+    }
+    .corazon {
+      position: absolute;
+      font-size: 20px;
+      color: white;
+      user-select: none;
+      animation: caer-lento 6s linear forwards;
+    }
+    .click-mensaje {
+      position: absolute;
+      font-size: 20px;
+      color: #ff69b4;
+      animation: desaparecer 2s ease-out forwards;
+      user-select: none;
+      pointer-events: none;
+    }
+    @keyframes caer-vertical {
+      to {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+    }
+    @keyframes caer-lento {
+      to {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+    }
+    @keyframes desaparecer {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(2) translateY(-30px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Audio público romántico para prueba -->
+  <audio id="musica" src="https://cdn.pixabay.com/download/audio/2022/02/23/audio_f20f12e81a.mp3?filename=romantic-piano-13351.mp3" loop></audio>
+
+  <script>
+    const columnas = 7;
+    let espacioColumna = window.innerWidth / columnas;
+    const alturaEntreMensajes = 28;
+    const mensajesPorColumna = 7;
+
+    function crearTeAmoEnColumna(col) {
+      const inicioY = -Math.random() * 300;
+      for (let i = 0; i < mensajesPorColumna; i++) {
+        const mensaje = document.createElement('div');
+        mensaje.className = 'mensaje';
+        mensaje.textContent = "te amo";
+        mensaje.style.left = `${col * espacioColumna + 20}px`;
+        mensaje.style.top = `${inicioY + i * alturaEntreMensajes}px`;
+        document.body.appendChild(mensaje);
+        setTimeout(() => mensaje.remove(), 2000);
+      }
+    }
+
+    function crearCorazonBlanco() {
+      const corazon = document.createElement('div');
+      corazon.className = 'corazon';
+      corazon.textContent = "🤍";
+      corazon.style.left = `${Math.random() * (window.innerWidth - 30)}px`;
+      corazon.style.top = '-30px';
+      document.body.appendChild(corazon);
+      setTimeout(() => corazon.remove(), 6000);
+    }
+
+    setInterval(() => {
+      for (let c = 0; c < columnas; c++) {
+        crearTeAmoEnColumna(c);
+      }
+      if (Math.random() < 0.5) {
+        crearCorazonBlanco();
+      }
+    }, 500);
+
+    window.addEventListener('resize', () => {
+      espacioColumna = window.innerWidth / columnas;
+    });
+
+    const musica = document.getElementById('musica');
+    let sonidoActivado = false;
+
+    window.onload = () => {
+      musica.play().then(() => {
+        sonidoActivado = true;
+      }).catch(() => {
+        // Autoplay bloqueado, se activará en el primer clic
+      });
+    };
+
+    document.addEventListener('click', (e) => {
+      if (!sonidoActivado) {
+        musica.play().catch(() => {});
+        sonidoActivado = true;
+      }
+
+      const clickMsg = document.createElement('div');
+      clickMsg.className = 'click-mensaje';
+      clickMsg.textContent = 'Te amo demasiado mi campeona 💘';
+      clickMsg.style.left = `${e.clientX}px`;
+      clickMsg.style.top = `${e.clientY}px`;
+      document.body.appendChild(clickMsg);
+      setTimeout(() => clickMsg.remove(), 2000);
+    });
+  </script>
+</body>
+</html>
+
